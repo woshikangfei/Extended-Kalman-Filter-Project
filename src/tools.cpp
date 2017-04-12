@@ -46,7 +46,6 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
     float vx = x_state(2);
     float vy = x_state(3);
 
-    //TODO: YOUR CODE HERE
     double x1 = px*px + py*py;
     double x2 = sqrt(x1);
     double x3 =x1*x2
