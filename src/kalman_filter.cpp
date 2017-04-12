@@ -18,10 +18,6 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 }
 
 void KalmanFilter::Predict() {
-  /**
-  TODO:
-    * predict the state
-  */
   x_ = F_ * x_;
   MatrixXd Ft = F_.transpose();
   P_ = F_ * P_ * Ft + Q_;
@@ -45,19 +41,14 @@ void KalmanFilter::Update(const VectorXd &z) {
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-  double range = sqrt((x_[0] * x_[0]) + (x_[1] * x_[1]));
-
-  double rr, bearing;
-  if (fabs(range) > 0.001) {
-    bearing = atan2(x_[1], x_[0]);
-    rr = ((x_[0] * x_[2] + x_[1] * x_[3]) / range);
-  } else {
-    bearing = 0;
-    rr = 0;
-  }
+  double px=x_(0);
+  double py=x_(1);
+  double vx=x_(2);
+  double vy=x_(3);
+  double temp = sqrt((px * px) + (py * py));
 
   MatrixXd z_pred(3, 1);
-  z_pred << range, bearing, rr;
+  z_pred << temp, atan(py / px), (px * vx + py * vy) / temp;
   VectorXd y = z - z_pred;
 
   MatrixXd Ht = H_.transpose();
@@ -71,4 +62,5 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   long x_size = x_.size();
   MatrixXd I = MatrixXd::Identity(x_size, x_size);
   P_ = (I - K * H_) * P_;
+  
 }
