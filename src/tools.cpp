@@ -48,7 +48,7 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 
     double x1 = px*px + py*py;
     double x2 = sqrt(x1);
-    double x3 =x1*x2
+    double x3 =x1*x2;
     //check division by zero
     if (c1<0.0001){
         std::cout << "Division by zero ERROR!" << std::endl;
